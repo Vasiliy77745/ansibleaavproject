@@ -1,8 +1,5 @@
 - name: Install awscli for server
   hosts: my_first_server
-  become: yes
-  remote_user: ubuntu
-  become_user: root
   
   tasks:
     - name: Upgrade all packages to the latest version
@@ -33,9 +30,6 @@
 
 - name: Create file on second server
   hosts: my_second_server
-  become: yes
-  remote_user: ubuntu
-  become user: root
   
   tasks: 
     - name: copy script
