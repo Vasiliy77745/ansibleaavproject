@@ -1,0 +1,65 @@
+- name: Install awscli for server
+  hosts: my_first_server
+  become: yes
+  remote_user: ubuntu
+  become_user: root
+  
+  tasks:
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        force_apt_get: yes
+        state: latest
+        update_cache: yes
+
+    - name: Install dependencies for awscli
+      apt:
+        name: "python3-pip"
+        state: latest
+        update_cache: yes
+
+    - name: Install awscli with pip3
+      pip:
+        name: "awscli"
+        executable: pip3
+      
+    - name: Create file
+      file:
+        path: "~/awscli_installed"
+        state: touch
+    
+    -name: 
+        shell: aws s3 cp ~/awscli_installed s3://aavawsbucket
+
+- name: Create file on second server
+  hosts: my_second_server
+  become: yes
+  remote_user: ubuntu
+  become user: root
+  
+  tasks: 
+    - name: copy script
+      copy:
+       src: ./second_play_execution.py
+       dest: ~/second_play_execution.py
+       mode: '0755'
+    - name: exec script
+      script: ./second_play_execution.sh
+      
+- name: 
+  hosts: servers_ALL
+  
+  tasks:
+    - name: installing CloudWatch
+      yum: name=amazon-cloudwatch-agent state=latest
+      notify: Start CloudWatch
+    
+  handlers:
+    - name: Start CloudWatch
+      service: name=amazon-cloudwatch-agent state=started
+
+  
+  
+  
+  
+  
