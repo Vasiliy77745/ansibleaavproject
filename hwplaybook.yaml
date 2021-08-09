@@ -1,16 +1,13 @@
 - name: Install awscli for server
   hosts: my_first_server
+  become: yes
+  remote_user: es2-user
+  become_user: root
   
   tasks:
-    - name: Upgrade all packages to the latest version
-      apt:
-        name: "*"
-        force_apt_get: yes
-        state: latest
-        update_cache: yes
 
     - name: Install dependencies for awscli
-      apt:
+      yum:
         name: "python3-pip"
         state: latest
         update_cache: yes
@@ -25,11 +22,14 @@
         path: "~/awscli_installed"
         state: touch
     
-    -name: 
-        shell: aws s3 cp ~/awscli_installed s3://aavawsbucket
+    - name: 
+      shell: aws s3 cp ~/awscli_installed s3://aavawsbucket
 
 - name: Create file on second server
   hosts: my_second_server
+  become: yes
+  remote_user: ec2-user
+  become_user: root
   
   tasks: 
     - name: copy script
